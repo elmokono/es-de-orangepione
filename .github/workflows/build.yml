@@ -8,14 +8,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install dependencies
+    - name: Enable ARMHF
       run: |
         sudo dpkg --add-architecture armhf
         sudo apt update
+
+    - name: Install toolchain + deps
+      run: |
         sudo apt install -y \
           gcc-arm-linux-gnueabihf \
           g++-arm-linux-gnueabihf \
-          cmake git \
+          cmake git pkg-config \
           libsdl2-dev:armhf \
           libfreeimage-dev:armhf \
           libfreetype6-dev:armhf \
@@ -32,14 +35,18 @@ jobs:
       run: |
         cd EmulationStation
         mkdir build && cd build
+
         cmake .. \
-          -DCMAKE_SYSTEM_NAME=Linux \
-          -DCMAKE_SYSTEM_PROCESSOR=arm \
-          -DCMAKE_C_COMPILER=arm-linux-gnueabihf-gcc \
-          -DCMAKE_CXX_COMPILER=arm-linux-gnueabihf-g++
+          -DCMAKE_TOOLCHAIN_FILE=../../toolchain-armhf.cmake \
+          -DCMAKE_BUILD_TYPE=Release
+
         make -j$(nproc)
 
-    - name: Upload binary
+    - name: Strip binary (reduce size)
+      run: |
+        arm-linux-gnueabihf-strip EmulationStation/build/emulationstation || true
+
+    - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: emulationstation-armhf

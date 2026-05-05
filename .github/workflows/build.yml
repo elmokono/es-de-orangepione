@@ -1,0 +1,46 @@
+name: Build EmulationStation ARMHF
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Install dependencies
+      run: |
+        sudo dpkg --add-architecture armhf
+        sudo apt update
+        sudo apt install -y \
+          gcc-arm-linux-gnueabihf \
+          g++-arm-linux-gnueabihf \
+          cmake git \
+          libsdl2-dev:armhf \
+          libfreeimage-dev:armhf \
+          libfreetype6-dev:armhf \
+          libasound2-dev:armhf \
+          libudev-dev:armhf \
+          libboost-all-dev:armhf \
+          libeigen3-dev:armhf
+
+    - name: Clone EmulationStation
+      run: |
+        git clone https://github.com/Aloshi/EmulationStation.git
+
+    - name: Build
+      run: |
+        cd EmulationStation
+        mkdir build && cd build
+        cmake .. \
+          -DCMAKE_SYSTEM_NAME=Linux \
+          -DCMAKE_SYSTEM_PROCESSOR=arm \
+          -DCMAKE_C_COMPILER=arm-linux-gnueabihf-gcc \
+          -DCMAKE_CXX_COMPILER=arm-linux-gnueabihf-g++
+        make -j$(nproc)
+
+    - name: Upload binary
+      uses: actions/upload-artifact@v4
+      with:
+        name: emulationstation-armhf
+        path: EmulationStation/build/emulationstation

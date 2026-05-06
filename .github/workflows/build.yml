@@ -16,6 +16,21 @@ jobs:
         sudo sed -i 's|http://archive.ubuntu.com/ubuntu|http://ports.ubuntu.com/ubuntu-ports|g' /etc/apt/sources.list
         sudo sed -i 's|http://security.ubuntu.com/ubuntu|http://ports.ubuntu.com/ubuntu-ports|g' /etc/apt/sources.list
     
+        # Add explicit ubuntu-ports repositories for armhf support
+        sudo tee /etc/apt/sources.list.d/ubuntu-ports.list > /dev/null << 'EOF'
+        deb http://ports.ubuntu.com/ubuntu-ports/ noble main restricted universe multiverse
+        deb-src http://ports.ubuntu.com/ubuntu-ports/ noble main restricted universe multiverse
+        
+        deb http://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted universe multiverse
+        deb-src http://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted universe multiverse
+        
+        deb http://ports.ubuntu.com/ubuntu-ports/ noble-security main restricted universe multiverse
+        deb-src http://ports.ubuntu.com/ubuntu-ports/ noble-security main restricted universe multiverse
+        
+        deb http://ports.ubuntu.com/ubuntu-ports/ noble-backports main restricted universe multiverse
+        deb-src http://ports.ubuntu.com/ubuntu-ports/ noble-backports main restricted universe multiverse
+        EOF
+        
         sudo apt update
         
     - name: Install toolchain + deps

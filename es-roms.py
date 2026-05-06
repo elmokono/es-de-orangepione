@@ -124,7 +124,7 @@ for system in sorted(os.listdir(ROMS_DIR)):
     dup_count = 0
 
     for file in sorted(os.listdir(system_path)):
-        if not file.lower().endswith((".zip", ".nes", ".sfc", ".smc", ".gba", ".gb", ".gbc")):
+        if not file.lower().endswith((".zip", ".nes", ".sfc", ".smc", ".smd", ".iso", ".bin", ".cue", ".gba", ".gb", ".gbc")):
             continue
 
         total += 1

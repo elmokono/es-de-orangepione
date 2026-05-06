@@ -7,7 +7,7 @@ import xml.etree.ElementTree as ET
 ROMS_DIR = "/home/daniel/roms"
 ES_DIR = "/home/daniel/.emulationstation"
 CACHE_FILE = os.path.expanduser("~/.cache/es_cache.json")
-DAT_DIR = "/home/daniel/dats"
+DAT_DIR = "/home/daniel/roms/dats"
 CORES_DIR = os.path.expanduser("~/.config/retroarch/cores")
 
 # ---------- ICONOS ----------
